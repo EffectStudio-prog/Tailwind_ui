@@ -1,49 +1,52 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
 
-export default function Login() {
+const Login = ({ setIsAuthenticated }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
 
-  const handleLogin = () => {
-    login(); // Mark the user as authenticated
-    navigate("/home");
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (username === "admin" && password === "password123") {
+      setIsAuthenticated(true);
+      navigate("/home");
+    }
   };
 
   return (
-    <div className="bg-white grid items-center justify-center h-screen font-bold">
-      <div className="bg-gray-200 flex flex-col gap-4 border-2 p-[40px] rounded-xl">
-        <h1 className="text-3xl">Login</h1>
-        <p>Welcome Back!</p>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white dark:bg-gray-800 shadow-md p-8 rounded-lg"
+      >
+        <h2 className="text-2xl font-bold mb-4">Login</h2>
         <input
           type="text"
           placeholder="Username"
-          className="text-black outline-none border-none rounded-lg"
+          className="w-full p-2 mb-4 border rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
-          className="text-black outline-none border-none rounded-lg"
+          className="w-full p-2 mb-4 border rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <button
-          className="bg-black text-white py-2 rounded-lg"
-          onClick={handleLogin}
-        >
+        <button className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded">
           Login
         </button>
-        <div className="text-md">
-          <a href="#">Forgot Password</a>
-          <p className="font-normal">
-            Don't have an account?{" "}
-            <a
-              className="font-bold text-black cursor-pointer"
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </a>
-          </p>
-        </div>
-      </div>
+        <p className="mt-4 text-sm">
+          Don't have an account?{" "}
+          <span className="text-blue-500 cursor-pointer" onClick={() => navigate("/register")}>
+            Register
+          </span>
+        </p>
+      </form>
     </div>
   );
-}
+};
+
+export default Login;
